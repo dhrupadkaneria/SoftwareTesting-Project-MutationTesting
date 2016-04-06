@@ -1,0 +1,14 @@
+Things to do:
+
+Java AST:
+	- Iterate through all the folders/files 
+	- Get handler to all the Arithmetic Expressions
+	- Change operator
+	- Save tree as Mutant
+
+Script:
+	- Research upon the scripting language 
+	- Learn how to access the mutants
+	- Execute the test cases on the mutants
+	- Save the statistics
+	- Calculate Mutation score
