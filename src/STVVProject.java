@@ -67,12 +67,12 @@ public class STVVProject
 					{
 						System.out.println("Expression");
 						
-						InstanceofExpression inst= (InstanceofExpression) st;
+						/*InstanceofExpression inst= (InstanceofExpression) st;
 						InfixExpression expression= ast.newInfixExpression(); 
 						expression.setLeftOperand((Expression) rewriter.createCopyTarget(inst.getLeftOperand())); 
 						expression.setOperator(InfixExpression.Operator.MINUS);
 						expression.setRightOperand((Expression) rewriter.createCopyTarget(inst.getRightOperand()));
-						rewriter.replace(inst, expression, null);
+						rewriter.replace(inst, expression, null);*/
 					}
 					/*ChildListPropertyDescriptor property = ast.;
 					System.out.println("StructuralProperties: " + n.getStructuralProperty(property.getNodeClass()));
