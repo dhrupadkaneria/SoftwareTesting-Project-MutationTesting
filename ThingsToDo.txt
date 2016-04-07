@@ -1,7 +1,8 @@
 Things to do:
 
 Java AST:
-	- Iterate through all the folders/files 
+	- Iterate through all the folders/files (Completed)
+	- Get all statements from all the iterated java files
 	- Get handler to all the Arithmetic Expressions
 	- Change operator
 	- Save tree as Mutant
