@@ -1,13 +1,24 @@
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
+import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
+
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,7 +27,6 @@ import java.util.Scanner;
 
 public class STVVProject
 {
-	@SuppressWarnings("resource")
 	public static void main(String args[]) throws Exception {
 		
 		//String content = new Scanner(new File("./src/testProject.java")).useDelimiter("\\Z").next();
@@ -26,10 +36,99 @@ public class STVVProject
 		listOfFiles = getAllFileNames(dir, listOfFiles);
 		for(int i = 0; i < listOfFiles.size(); ++i)
 		{
-			content = new Scanner(new File(listOfFiles.get(i))).useDelimiter("\\Z").next();
-			instrumentation(content);	
+			//content = new Scanner(new File(listOfFiles.get(i))).useDelimiter("\\Z").next();
+			//instrumentation(content);
+			
+			File file = new File(listOfFiles.get(i));
+			processJavaFile(file);
 		}
+		/*File file = new File("./src/testProject.java");
+		processJavaFile(file);*/
 	}
+	
+	
+	public static void processJavaFile(File file) throws Exception, BadLocationException 
+	{
+	    String source = FileUtils.readFileToString(file);
+	    Document document = new Document(source);
+	    ASTParser parser = ASTParser.newParser(AST.JLS3);
+	    parser.setSource(document.get().toCharArray());
+	    CompilationUnit unit = (CompilationUnit)parser.createAST(null);
+	    unit.recordModifications();
+
+	    // to get the imports from the file
+/*	    List<ImportDeclaration> imports = unit.imports();
+	    for (ImportDeclaration i : imports) 
+	    {
+	        System.out.println(i.getName().getFullyQualifiedName());
+	    }
+*/
+	    // to create a new import
+	    AST ast = unit.getAST();
+	    ImportDeclaration id = ast.newImportDeclaration();
+	    //String classToImport = "path.to.some.class";
+	    //id.setName(ast.newName(classToImport.split("\\.")));
+	    //unit.imports().add(id); // add import declaration at end
+
+	    // to save the changed file
+	    TextEdit edits = unit.rewrite(document, null);
+	    edits.apply(document);
+	    FileUtils.writeStringToFile(file, document.get());
+
+	    // to iterate through methods
+	    List<AbstractTypeDeclaration> types = unit.types();
+	    for (AbstractTypeDeclaration type : types) 
+	    {
+	        if (type.getNodeType() == ASTNode.TYPE_DECLARATION) 
+	        {
+	        	//System.out.println("class: " + type.getName().getFullyQualifiedName());
+	            // Class def found
+	            List<BodyDeclaration> bodies = type.bodyDeclarations();
+	            for (BodyDeclaration body : bodies) 
+	            {
+	                if (body.getNodeType() == ASTNode.METHOD_DECLARATION) 
+	                {
+	                    MethodDeclaration method = (MethodDeclaration)body;
+	                    //System.out.println("method: " + method.getName().getFullyQualifiedName());
+	                    if(method.getBody() != null)
+	                    {
+	                    	Block methodBlock = method.getBody();
+	                    	List statements = methodBlock.statements();
+	                    	for(int i = 0; i < statements.size(); ++i)
+	                    	{
+	                    		//System.out.println("statementClass " + i + ": " + statements.get(i).getClass());
+	                    		//System.out.println("statement " + i + ": " + statements.get(i));
+	                    		if(statements.get(i) instanceof WhileStatement)
+	                    		{
+	                    			//System.out.println("While statement " + i + ": " + statements.get(i));
+		                    		
+	                    		}
+	                    		if(statements.get(i) instanceof IfStatement)
+	                    		{
+	                    			//System.out.println("If statement " + i + ": " + statements.get(i));
+		                    		
+	                    		}
+	                    	}
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    ASTVisitor astVisitor = new ASTVisitor(){
+	    	public boolean visit(final IfStatement ifstatement)
+	    	{
+	    		System.out.println("\nif then: " + ifstatement.getThenStatement());
+	    		System.out.println("if else: " + ifstatement.getElseStatement());
+	    		System.out.println("if expression: " + ifstatement.getExpression());
+	    		System.out.println("if statement: " + ifstatement);
+	    		return true;
+	    	}
+	    };
+	    unit.accept(astVisitor);
+	}
+	
+	
+	
 
 	
 	@SuppressWarnings("unchecked")
@@ -60,6 +159,7 @@ public class STVVProject
 			for(int i = 0; i < methodList.length; ++i)
 			{
 				System.out.println("method :" + methodList[i].getName());
+				//ASTVisitor astVisitor = new ASTVisitor();
 				/*block = methodList[i].getBody();
 
 				statements = block.statements();
