@@ -68,8 +68,8 @@ public class STVVProject
 	    }
 */
 	    // to create a new import
-	    AST ast = unit.getAST();
-	    ImportDeclaration id = ast.newImportDeclaration();
+	    //AST ast = unit.getAST();
+	    /*ImportDeclaration id = ast.newImportDeclaration();
 	    //String classToImport = "path.to.some.class";
 	    //id.setName(ast.newName(classToImport.split("\\.")));
 	    //unit.imports().add(id); // add import declaration at end
@@ -117,40 +117,63 @@ public class STVVProject
 	                }
 	            }
 	        }
-	    }
+	    }*/
 	    ASTVisitor astVisitor = new ASTVisitor(){
 	    	public boolean visit(final IfStatement ifstatement)
 	    	{
 
-	    		System.out.println("before: " + ifstatement);
+	    		//System.out.println("before: " + ifstatement);
 	    		Expression e = ifstatement.getExpression();
-	    		System.out.println("\nExpr: " + e.getClass());
-	    		System.out.println("expression: " + ifstatement.getExpression());
+	    		//System.out.println("\nExpr: " + e.getClass());
+	    		System.out.println("\nbefore: " + ifstatement.getExpression());
 	    		
 	    		if(e instanceof InfixExpression)
 	    		{
-	    			System.out.println("left: " + ((InfixExpression) e).getLeftOperand());
-	    			System.out.println("right: " + ((InfixExpression) e).getRightOperand());
-	    			System.out.println("operator: " + ((InfixExpression) e).getOperator());
+	    			//System.out.println("left: " + ((InfixExpression) e).getLeftOperand());
+	    			//System.out.println("right: " + ((InfixExpression) e).getRightOperand());
+	    			//System.out.println("operator: " + ((InfixExpression) e).getOperator());
 	    			
 	    			if(((InfixExpression) e).getOperator() == InfixExpression.Operator.CONDITIONAL_OR)
 	    			{
-	    				System.out.println("change operator");;
 	    				((InfixExpression) e).setOperator(InfixExpression.Operator.CONDITIONAL_AND);
 	    			}
-	    			System.out.println("operator: " + ((InfixExpression) e).getOperator());
-	    			
-	    			/*InstanceofExpression inst = (InstanceofExpression)e;
-	    			System.out.println("Left: " + inst.getLeftOperand());
-	    			System.out.println("Right: " + inst.getRightOperand());*/
-	    			//System.out.println("Operator: " + inst.get);
+	    			else if(((InfixExpression) e).getOperator() == InfixExpression.Operator.CONDITIONAL_AND)
+	    			{
+	    				((InfixExpression) e).setOperator(InfixExpression.Operator.CONDITIONAL_OR);
+	    			}
+	    			else if(((InfixExpression) e).getOperator() == InfixExpression.Operator.GREATER)
+	    			{
+	    				((InfixExpression) e).setOperator(InfixExpression.Operator.GREATER_EQUALS);
+	    			}
+	    			else if(((InfixExpression) e).getOperator() == InfixExpression.Operator.GREATER_EQUALS)
+	    			{
+	    				((InfixExpression) e).setOperator(InfixExpression.Operator.GREATER);
+	    			}
+	    			else if(((InfixExpression) e).getOperator() == InfixExpression.Operator.LESS)
+	    			{
+	    				((InfixExpression) e).setOperator(InfixExpression.Operator.LESS_EQUALS);
+	    			}
+	    			else if(((InfixExpression) e).getOperator() == InfixExpression.Operator.LESS_EQUALS)
+	    			{
+	    				((InfixExpression) e).setOperator(InfixExpression.Operator.LESS);
+	    			}
+	    			else if(((InfixExpression) e).getOperator() == InfixExpression.Operator.NOT_EQUALS)
+	    			{
+	    				((InfixExpression) e).setOperator(InfixExpression.Operator.EQUALS);
+	    			}
+	    			else if(((InfixExpression) e).getOperator() == InfixExpression.Operator.EQUALS)
+	    			{
+	    				((InfixExpression) e).setOperator(InfixExpression.Operator.NOT_EQUALS);
+	    			}
+	    			//System.out.println("operator: " + ((InfixExpression) e).getOperator());
 	    		}
-	    		//System.out.println("if then: " + ifstatement.getThenStatement());
-	    		//System.out.println("if else: " + ifstatement.getElseStatement());
 	    		
-	    		System.out.println("after: " + ifstatement);
+	    		System.out.println("after: " + ifstatement.getExpression());
+	    		//System.out.println("after: " + ifstatement);
 	    		return true;
 	    	}
+	    	
+	    	
 	    };
 	    unit.accept(astVisitor);
 	}
