@@ -7,8 +7,12 @@ import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.InfixExpression;
+import org.eclipse.jdt.core.dom.InfixExpression.Operator;
+import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.WhileStatement;
@@ -117,10 +121,34 @@ public class STVVProject
 	    ASTVisitor astVisitor = new ASTVisitor(){
 	    	public boolean visit(final IfStatement ifstatement)
 	    	{
-	    		System.out.println("\nif then: " + ifstatement.getThenStatement());
-	    		System.out.println("if else: " + ifstatement.getElseStatement());
-	    		System.out.println("if expression: " + ifstatement.getExpression());
-	    		System.out.println("if statement: " + ifstatement);
+
+	    		System.out.println("before: " + ifstatement);
+	    		Expression e = ifstatement.getExpression();
+	    		System.out.println("\nExpr: " + e.getClass());
+	    		System.out.println("expression: " + ifstatement.getExpression());
+	    		
+	    		if(e instanceof InfixExpression)
+	    		{
+	    			System.out.println("left: " + ((InfixExpression) e).getLeftOperand());
+	    			System.out.println("right: " + ((InfixExpression) e).getRightOperand());
+	    			System.out.println("operator: " + ((InfixExpression) e).getOperator());
+	    			
+	    			if(((InfixExpression) e).getOperator() == InfixExpression.Operator.CONDITIONAL_OR)
+	    			{
+	    				System.out.println("change operator");;
+	    				((InfixExpression) e).setOperator(InfixExpression.Operator.CONDITIONAL_AND);
+	    			}
+	    			System.out.println("operator: " + ((InfixExpression) e).getOperator());
+	    			
+	    			/*InstanceofExpression inst = (InstanceofExpression)e;
+	    			System.out.println("Left: " + inst.getLeftOperand());
+	    			System.out.println("Right: " + inst.getRightOperand());*/
+	    			//System.out.println("Operator: " + inst.get);
+	    		}
+	    		//System.out.println("if then: " + ifstatement.getThenStatement());
+	    		//System.out.println("if else: " + ifstatement.getElseStatement());
+	    		
+	    		System.out.println("after: " + ifstatement);
 	    		return true;
 	    	}
 	    };
