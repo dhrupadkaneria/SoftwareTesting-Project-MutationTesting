@@ -3,32 +3,21 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.InfixExpression;
-import org.eclipse.jdt.core.dom.InfixExpression.Operator;
-import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
-import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
-
-import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Random;
 
 public class STVVProject
 {
@@ -42,20 +31,35 @@ public class STVVProject
 			File dest = new File("./Mutants/Mutant" + i);
 			FileUtils.copyDirectory(source, dest);
 		}
+		
+		
+		
+		int i = 0;
+		while(i < numofmutants)
+		{
+			File dir = new File("./Mutants/Mutant" + i + "/src/main/java/org/parse4j");
+			ArrayList<String> listOfFiles = new ArrayList<String>();
+			listOfFiles = getAllFileNames(dir, listOfFiles);
+			Random random = new Random();
+			int fileNumber = random.nextInt(listOfFiles.size() + 1);
+			System.out.println("changedFile: " + listOfFiles.get(fileNumber));
+			processJavaFile(new File(listOfFiles.get(fileNumber)));
+			i++;
+		}
 				
 		//String content = new Scanner(new File("./src/testProject.java")).useDelimiter("\\Z").next();
-		String content;
-		File dir = new File("./parse4j-036c44ca4eb167a260897ddd9e573dc63f72d796/src/main/java/org/parse4j");
-		ArrayList<String> listOfFiles = new ArrayList<String>();
-		listOfFiles = getAllFileNames(dir, listOfFiles);
-		for(int i = 0; i < listOfFiles.size(); ++i)
-		{
+		//String content;
+		//File dir = new File("./parse4j-036c44ca4eb167a260897ddd9e573dc63f72d796/src/main/java/org/parse4j");
+		//ArrayList<String> listOfFiles = new ArrayList<String>();
+		//listOfFiles = getAllFileNames(dir, listOfFiles);
+		//for(int i = 0; i < listOfFiles.size(); ++i)
+		//{
 			//content = new Scanner(new File(listOfFiles.get(i))).useDelimiter("\\Z").next();
 			//instrumentation(content);
 			
-			File file = new File(listOfFiles.get(i));
-			processJavaFile(file);
-		}
+			//File file = new File(listOfFiles.get(i));
+			//processJavaFile(file);
+		//}
 		/*File file = new File("./src/testProject.java");
 		processJavaFile(file);*/
 	}
