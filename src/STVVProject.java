@@ -25,6 +25,7 @@ import org.eclipse.text.edits.TextEdit;
 import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -33,6 +34,15 @@ public class STVVProject
 {
 	public static void main(String args[]) throws Exception {
 		
+		int numofmutants = 10;
+		deleteDir(new File("./Mutants"));
+		for(int i=0; i<numofmutants; i++)
+		{
+			File source = new File("./parse4j-036c44ca4eb167a260897ddd9e573dc63f72d796");
+			File dest = new File("./Mutants/Mutant" + i);
+			FileUtils.copyDirectory(source, dest);
+		}
+				
 		//String content = new Scanner(new File("./src/testProject.java")).useDelimiter("\\Z").next();
 		String content;
 		File dir = new File("./parse4j-036c44ca4eb167a260897ddd9e573dc63f72d796/src/main/java/org/parse4j");
@@ -50,6 +60,18 @@ public class STVVProject
 		processJavaFile(file);*/
 	}
 	
+	public static boolean deleteDir(File dir) {
+	    if (dir.isDirectory()) {
+	        String[] children = dir.list();
+	        for (int i=0; i<children.length; i++) {
+	            boolean success = deleteDir(new File(dir, children[i]));
+	            if (!success) {
+	                return false;
+	            }
+	        }
+	    }
+	    return dir.delete();
+	}
 	
 	public static void processJavaFile(File file) throws Exception, BadLocationException 
 	{
