@@ -23,7 +23,7 @@ public class STVVProject
 	
 	public static void main(String args[]) throws Exception 
 	{
-		int numOfMutants = 3;
+		int numOfMutants = Integer.parseInt(args[0]);
 		status = new boolean[numOfMutants];
 		changes = new ArrayList<String>();
 		deleteDir(new File("./Mutants"));

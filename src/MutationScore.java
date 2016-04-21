@@ -6,7 +6,7 @@ public class MutationScore {
 
 	public static void main(String[] args) throws Exception 
 	{
-		int numOfMutants = 3;
+		int numOfMutants = Integer.parseInt(args[0]);
 		int killMutant = 0;
 		int correctMutant = 0;
 		
