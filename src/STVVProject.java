@@ -29,7 +29,7 @@ public class STVVProject
 		deleteDir(new File("./Mutants"));
 		for(int i = 0; i < numofmutants; i++)
 		{
-			File source = new File("./parse4j-036c44ca4eb167a260897ddd9e573dc63f72d796");
+			File source = new File("./parse4j-master");
 			//File source = new File("D:/University of Texas at Dallas/Sem 5 - Spring 2016/Software Testing, Validation and Verification/jade4j-master");
 			File dest = new File("./Mutants/Mutant" + i);
 			FileUtils.copyDirectory(source, dest);
