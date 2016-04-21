@@ -131,6 +131,7 @@
 					<configuration>
 						<redirectTestOutputToFile>true</redirectTestOutputToFile>
 						<parallel>classes</parallel>
+						<useUnlimitedThreads>true</useUnlimitedThreads>
 					</configuration>
 				</plugin>
 			</plugins>
