@@ -23,11 +23,11 @@ public class STVVProject
 	
 	public static void main(String args[]) throws Exception 
 	{
-		int numofmutants = 5;
-		status = new boolean[numofmutants];
+		int numOfMutants = 0;
+		status = new boolean[numOfMutants];
 		changes = new ArrayList<String>();
 		deleteDir(new File("./Mutants"));
-		for(int i = 0; i < numofmutants; i++)
+		for(int i = 0; i < numOfMutants; i++)
 		{
 			File source = new File("./parse4j-master");
 			//File source = new File("D:/University of Texas at Dallas/Sem 5 - Spring 2016/Software Testing, Validation and Verification/jade4j-master");
@@ -36,7 +36,7 @@ public class STVVProject
 			status[i] = false;
 		}
 		int i = 0;
-		while(i < numofmutants)
+		while(i < numOfMutants)
 		{
 			File dir = new File("./Mutants/Mutant" + i + "/src/main/java/org/parse4j");
 			//File dir = new File("./Mutants/Mutant" + i + "/jade4j-master/src/main/java");
