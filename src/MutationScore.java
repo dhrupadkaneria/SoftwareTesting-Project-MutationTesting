@@ -1,18 +1,27 @@
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.PrintStream;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.TeeOutputStream;
 
 public class MutationScore {
 
 	public static void main(String[] args) throws Exception 
 	{
+		FileOutputStream fos = new FileOutputStream("output.txt", true);
+	    TeeOutputStream myOut=new TeeOutputStream(System.out, fos);
+	    PrintStream ps = new PrintStream(myOut);
+	    System.setOut(ps);
+	    
 		int numOfMutants = Integer.parseInt(args[0]);
 		int killMutant = 0;
 		int correctMutant = 0;
 		
 		int test_master = 92;
 		int failed_master = 9;
-		int error_master = 9;
+		int error_master = 11;
 		int skipped_master = 0;
 		
 		System.out.println("Master Project");
@@ -71,7 +80,7 @@ public class MutationScore {
 		System.out.println("\nFinal Statistics:\nKilled Mutants: " + killMutant);
 		System.out.println("Alive Mutants: " + correctMutant);
 		System.out.println("Total Mutants: " + numOfMutants);
-		System.out.println("Mutation Score: " + (killMutant/numOfMutants)*100 + "%");
+		System.out.println("Mutation Score: " + (killMutant/(double)numOfMutants)*100 + "%");
 	}
 
 }

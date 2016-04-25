@@ -1,4 +1,5 @@
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.TeeOutputStream;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -13,6 +14,8 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.text.edits.TextEdit;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -23,6 +26,11 @@ public class STVVProject
 	
 	public static void main(String args[]) throws Exception 
 	{
+		FileOutputStream fos = new FileOutputStream("output.txt");
+	    TeeOutputStream myOut=new TeeOutputStream(System.out, fos);
+	    PrintStream ps = new PrintStream(myOut);
+	    System.setOut(ps);
+	    
 		int numOfMutants = Integer.parseInt(args[0]);
 		status = new boolean[numOfMutants];
 		changes = new ArrayList<String>();
@@ -198,6 +206,20 @@ public class STVVProject
 	    				newOp = InfixExpression.Operator.NOT_EQUALS;
 	    				((InfixExpression) e).setOperator(InfixExpression.Operator.NOT_EQUALS);
 	    			}
+	    			else if(((InfixExpression) e).getOperator() == InfixExpression.Operator.TIMES)
+	    			{
+	    				status[count] = true;
+	    				oldOp = InfixExpression.Operator.TIMES;
+	    				newOp = InfixExpression.Operator.MINUS;
+	    				((InfixExpression) e).setOperator(InfixExpression.Operator.MINUS);
+	    			}
+	    			else if(((InfixExpression) e).getOperator() == InfixExpression.Operator.MINUS)
+	    			{
+	    				status[count] = true;
+	    				oldOp = InfixExpression.Operator.MINUS;
+	    				newOp = InfixExpression.Operator.TIMES;
+	    				((InfixExpression) e).setOperator(InfixExpression.Operator.TIMES);
+	    			}
 	    			if(status[count] == true)
 	    			{
 		    			updateChanges(oldOp, newOp, statement, count, path, unit, document);
@@ -205,7 +227,6 @@ public class STVVProject
 	    		}
 	    		return true;
 	    	}
-	    	
 	    	
 	    	public boolean visit(WhileStatement statement)
 	    	{

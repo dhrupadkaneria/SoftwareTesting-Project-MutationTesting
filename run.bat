@@ -12,7 +12,6 @@ setlocal
 
 	:loop
     if !counter! lss !limit! (
-		echo !counter!
         cd Mutants/Mutant!counter!
 		cd
 		call mvn test
