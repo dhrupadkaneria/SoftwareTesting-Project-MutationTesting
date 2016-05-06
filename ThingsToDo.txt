@@ -8,8 +8,8 @@ Java AST:
 	- Save tree as Mutant (Completed)
 
 Script:
-	- Research upon the scripting language (On going) 
-	- Learn how to access the mutants
-	- Execute the test cases on the mutants
-	- Save the statistics
-	- Calculate Mutation score
+	- Research upon the scripting language (Completed) 
+	- Learn how to access the mutants (Completed)
+	- Execute the test cases on the mutants (Completed)
+	- Save the statistics (Completed)
+	- Calculate Mutation score (Completed)
